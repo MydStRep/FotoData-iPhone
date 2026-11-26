@@ -1,0 +1,42 @@
+name: Sestavit FotoData pro iPhone
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: Načíst projekt
+        uses: actions/checkout@v4
+
+      - name: Sestavit aplikaci pro iPhone
+        run: |
+          xcodebuild \
+            -project FotoData.xcodeproj \
+            -target FotoData \
+            -configuration Release \
+            -sdk iphoneos \
+            ARCHS=arm64 \
+            CODE_SIGNING_ALLOWED=NO \
+            CONFIGURATION_BUILD_DIR="$RUNNER_TEMP/build" \
+            build
+
+      - name: Zabalit aplikaci
+        run: |
+          mkdir -p "$RUNNER_TEMP/balicek/Payload"
+          cp -R "$RUNNER_TEMP/build/FotoData.app" "$RUNNER_TEMP/balicek/Payload/"
+          cd "$RUNNER_TEMP/balicek"
+          zip -qry "$GITHUB_WORKSPACE/FotoData.ipa" Payload
+
+      - name: Uložit soubor ke stažení
+        uses: actions/upload-artifact@v4
+        with:
+          name: FotoData-iPhone
+          path: FotoData.ipa
+          if-no-files-found: error
