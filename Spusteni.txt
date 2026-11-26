@@ -1,0 +1,7 @@
+FotoData pro iPhone, iOS 16 nebo novější
+
+Na Macu rozbal ZIP a otevři FotoData.xcodeproj v Xcode.
+V cíli FotoData otevři Signing & Capabilities a zvol svůj Team. Pokud je identifikátor již obsazený, uprav Bundle Identifier.
+Připoj iPhone, vyber ho jako cílové zařízení a stiskni Run. Pokud tě iPhone vyzve, povol vývojářský režim.
+
+Fotky otevřou výběr z galerie. Pro kontrolu přesných bajtů konkrétního souboru použij Soubory.
